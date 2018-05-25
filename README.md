@@ -1,2 +1,2 @@
-# spak-loader
+# spark-loader
 Couchbase Spark Loader 
