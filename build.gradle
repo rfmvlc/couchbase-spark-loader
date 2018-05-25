@@ -1,0 +1,43 @@
+group 'couchbase.couchbase.bigdata'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+sourceCompatibility = 1.8
+
+idea {
+    project {
+        jdkName = '1.8'
+        languageLevel = '1.8'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.2.0'
+    compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.2.0'
+    compile group: 'com.couchbase.client', name: 'spark-connector_2.11', version: '2.2.0'
+
+}
+
+
+jar {
+    zip64 true
+    archiveName = "demo-spark-loader.jar"
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    manifest {
+        attributes 'Main-Class': 'com.couchbase.bigdata.demo.MoviesLoader'
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+
+}
