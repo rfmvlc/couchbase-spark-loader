@@ -28,7 +28,7 @@ public class MoviesLoader {
                 .builder()
                 .appName("moviesLoader")
                 .master("local[*]") // use the JVM as the master, great for testing
-                .config("spark.couchbase.nodes", "52.19.198.115")
+                .config("spark.couchbase.nodes", "localhost")
                 .config("spark.couchbase.bucket.movies", "") // open the movies bucket with empty password (yes it is this way!)
                 .config("com.couchbase.username", "Administrator")
                 .config("com.couchbase.password", "password")

@@ -29,14 +29,14 @@ public class RatingsLoader {
     public static void main(String[] args) throws Exception {
 
         Logger.getLogger("org").setLevel(Level.ERROR);
-        Logger logger = Logger.getLogger(MoviesLoader.class);
+        Logger logger = Logger.getLogger(RatingsLoader.class);
 
         // Create a Java Spark Context.
         SparkSession spark = SparkSession
                 .builder()
                 .appName("ratingsLoader")
                 .master("local[*]") // use the JVM as the master, great for testing
-                .config("spark.couchbase.nodes", "52.19.198.115")
+                .config("spark.couchbase.nodes", "localhost")
                 .config("spark.couchbase.bucket.movies", "") // open the movies bucket with empty password (yes it is this way!)
                 .config("com.couchbase.username", "Administrator")
                 .config("com.couchbase.password", "password")
