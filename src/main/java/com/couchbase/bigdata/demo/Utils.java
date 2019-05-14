@@ -1,10 +1,12 @@
 package com.couchbase.bigdata.demo;
 
-public class Utils {
+import com.github.javafaker.Faker;
 
-    private Utils(){
-    };
+
+public class Utils {
 
     // a regular expression which matches commas but not commas within double quotations
     public static final String COMMA_DELIMITER = ",(?=([^\"]*\"[^\"]*\")*[^\"]*$)";
+    public static Faker faker = new Faker();
+
 }

@@ -18,7 +18,7 @@ import static java.lang.String.format;
 
 public class MoviesLoader {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         Logger.getLogger("org").setLevel(Level.ERROR);
         Logger logger = Logger.getLogger(MoviesLoader.class);
@@ -32,20 +32,20 @@ public class MoviesLoader {
                 .config("spark.couchbase.bucket.movies", "") // open the movies bucket with empty password (yes it is this way!)
                 .config("com.couchbase.username", "Administrator")
                 .config("com.couchbase.password", "password")
-                // 60s to avoid timeouts on small clusters
-                .config("com.couchbase.kvTimeout", "60000")
-                .config("com.couchbase.connectTimeout", "60000")
-                .config("com.couchbase.socketConnect", "60000")
-                .config("com.couchbase.maxRetryDelay", "60000")
-                .config("com.couchbase.minRetryDelay", "60000")
+                // 1s default timemout
+                // increase for small clusters
+                .config("com.couchbase.kvTimeout", "1000")
+                .config("com.couchbase.connectTimeout", "1000")
+                .config("com.couchbase.socketConnect", "1000")
+                .config("com.couchbase.maxRetryDelay", "1000")
+                .config("com.couchbase.minRetryDelay", "1000")
                 .getOrCreate();
 
         JavaSparkContext sc = new JavaSparkContext(spark.sparkContext());
 
-        // small data set for small clusters
-        JavaRDD<String> lines = sc.textFile("in/movies.csv").filter(line -> !line.contains("movieId"));
-        // uncomment for full data set
-        // JavaRDD<String> lines = sc.textFile("in/ml-latest/movies.csv").filter(line -> !line.contains("movieId"));
+        // config local movies directory
+        JavaRDD<String> lines = sc.textFile(System.getProperty("user.home") + "/Movies/movies.csv").filter(line -> !line.contains("movieId")); // skip first row
+
 
         // crate rdd with json jsonDocumentJavaRDD
         JavaRDD<JsonDocument> jsonDocumentJavaRDD = lines.map(line -> {
@@ -57,7 +57,9 @@ public class MoviesLoader {
             movie.put("type", "movie");
 
             // transformation
+
             String originalTitle = splits[1].replace("\"", "");
+
             // if title contains year
             Matcher m = Pattern.compile("\\(([1-2][0-9][0-9][0-9])\\)").matcher(splits[1]);
             if (m.find()) {
@@ -67,6 +69,7 @@ public class MoviesLoader {
             }
 
             movie.put("title", originalTitle);
+
             // genres to array
             movie.put("genres", Arrays.asList(splits[2].split("\\|")));
 
