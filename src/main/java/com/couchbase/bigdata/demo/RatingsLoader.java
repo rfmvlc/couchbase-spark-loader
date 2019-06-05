@@ -3,6 +3,7 @@ package com.couchbase.bigdata.demo;
 
 import com.couchbase.client.java.document.JsonDocument;
 import com.couchbase.client.java.document.json.JsonObject;
+import com.couchbase.spark.StoreMode;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.spark.api.java.JavaRDD;
@@ -25,7 +26,7 @@ public class RatingsLoader {
         SparkSession spark = SparkSession
                 .builder()
                 .appName("ratingsLoader")
-                .master("local[*]") // use the JVM as the master, great for testing
+                .master("local[2]") // use the JVM as the master, great for testing
                 .config("spark.couchbase.nodes", "localhost")
                 .config("spark.couchbase.bucket.movies", "") // open the movies bucket with empty password (yes it is this way!)
                 .config("com.couchbase.username", "Administrator")
@@ -66,7 +67,7 @@ public class RatingsLoader {
 
 
             // key ratings_movieId_userId
-            return JsonDocument.create(format("rating_%s_%s", splits[1], splits[0]), rating);
+            return JsonDocument.create(format("rating::%s::%s", splits[1], splits[0]), rating);
         });
 
         logger.info(format("***** Total ratings %d", jsonDocumentJavaRDD.count()));
@@ -75,7 +76,7 @@ public class RatingsLoader {
 
         couchbaseDocumentRDD(
                 jsonDocumentJavaRDD
-        ).saveToCouchbase();
+        ).saveToCouchbase(StoreMode.UPSERT,"movies",5000,5000);
 
 
     }

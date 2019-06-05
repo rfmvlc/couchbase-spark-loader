@@ -19,9 +19,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.2.0'
-    compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.2.0'
-    compile group: 'com.couchbase.client', name: 'spark-connector_2.11', version: '2.2.0'
+    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
+    compile group: 'org.apache.spark', name: 'spark-sql_2.11', version: '2.3.0'
+    compile group: 'com.couchbase.client', name: 'spark-connector_2.11', version: '2.3.0'
     compile group: 'com.github.javafaker', name: 'javafaker', version: '0.16'
 
 }
