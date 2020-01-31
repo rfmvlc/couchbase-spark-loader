@@ -9,11 +9,11 @@ $ wget http://files.grouplens.org/datasets/movielens/ml-latest.zip
 
 ```
 $ nice unzip -j "ml-latest.zip"
-$ mv ml-latest movies
+$ mv ml-latest Movies
 ``` 
 
 ## Configure Java loader with the movies path
 
 ```
-JavaRDD<String> lines = sc.textFile(System.getProperty("user.home") + "/movies/movies.csv")
+JavaRDD<String> lines = sc.textFile(System.getProperty("user.home") + "/Movies/movies.csv")
 ```
